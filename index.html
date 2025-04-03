@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contributors</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="header">
+      <center>
+        <h1 style="font-size:50px; margin:0 !important;">Korone Developers</h1>
+        <small>All The Contributors Of Korone Cloud</small>
+      </center>
+      <hr>
+      <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+      <script>
+        eruda.init({
+          defaults: {
+            displaySize: 45,
+            theme: "AMOLED"
+          }
+        });
+      </script>
+    </div>
+    <div class="popup-overlay" id="popup-overlay"></div>
+    <div class="contributors">
+      <div class="contributors-container" id="contributors"></div>
+    </div>
+    <div id="popup" class="popup hidden">
+      <div class="popup-content">
+        <img id="popup-pfp" src="" alt="Profile Picture">
+        <div class="popup-info">
+          <h1 id="popup-name"></h1>
+          <hr style="margin:0">
+          <p id="popup-description">Contributor description here.</p>
+          <div id="popup-socials" class="popup-socials"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      async function loadContributors() {
+        try {
+          const response = await fetch('contributors.json');
+          const contributors = await response.json();
+          const container = document.getElementById('contributors');
+          container.style.gridTemplateColumns = `repeat(${contributors.length * 2}, minmax(200px, 1fr))`;
+          contributors.forEach(contributor => {
+            elem = container.children[container.children.length / 2]
+            const card1 = document.createElement('div');
+            const card2 = document.createElement('div');
+            card1.classList.add('contributor-card');
+            card2.classList.add('contributor-card');
+            card1.innerHTML = `
+									<img src="${contributor.pfp}" alt="${contributor.name}">
+										<h3>${contributor.name}</h3>
+                    `;
+            card2.innerHTML = `
+            <img src="${contributor.pfp}" alt="${contributor.name}">
+              <h3>${contributor.name}</h3>
+              `;
+            card1.onclick = () => openPopup(contributor);
+            card2.onclick = () => openPopup(contributor);
+            container.insertBefore(card1, elem);
+            container.appendChild(card2);
+          });
+        } catch (error) {
+          console.error('Error loading contributors:', error);
+        }
+      }
+
+      function openPopup(contributor) {
+        const popup = document.getElementById('popup');
+        const overlay = document.getElementById('popup-overlay');
+        const container = document.querySelector('.contributors-container');
+        
+        popup.classList.remove('hidden');
+        container.classList.add('popup-active');
+        
+        document.getElementById('popup-pfp').src = contributor.pfp;
+        document.getElementById('popup-name').textContent = contributor.name;
+        document.getElementById('popup-description').textContent = contributor.description || "No description provided.";
+        const socialContainer = document.getElementById('popup-socials');
+        socialContainer.innerHTML = '';
+        contributor.socials.forEach(social => {
+          const socialItem = document.createElement('p');
+          socialItem.innerHTML = `
+										
+										<strong>${social.name}:</strong>
+										<a href="${social.url}" target="_blank">${social.handle}</a>`;
+          socialContainer.appendChild(socialItem);
+        });
+        window.location.hash = contributor.name.toLowerCase().replace(/\s+/g, '');
+        overlay.style.display = 'block';
+        popup.style.display = 'flex';
+        void popup.offsetWidth;
+        popup.classList.add('active');
+        overlay.classList.add('active');
+      }
+
+      function closePopup() {
+        const popup = document.getElementById('popup');
+        const overlay = document.getElementById('popup-overlay');
+        const container = document.querySelector('.contributors-container');
+        
+        popup.classList.add('hidden');
+        overlay.classList.add('hidden');
+        container.classList.remove('popup-active');
+        
+        setTimeout(() => {
+          popup.style.display = 'none';
+          overlay.style.display = 'none';
+          popup.classList.remove('active');
+          overlay.classList.remove('active', 'hidden');
+        }, 300);
+        
+        history.pushState("", document.title, window.location.pathname);
+      }
+
+      // event listener for the esc key
+      document.getElementById('popup-overlay').addEventListener('click', closePopup);
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && document.getElementById('popup').style.display === 'flex') {
+          closePopup();
+        }
+      });
+
+      async function handleHashNavigation() {
+        const hash = window.location.hash.slice(1).toLowerCase();
+        if (hash) {
+          const response = await fetch('contributors.json');
+          const contributors = await response.json();
+          const contributor = contributors.find(c => 
+            c.name.toLowerCase().replace(/\s+/g, '') === hash
+          );
+          if (contributor) {
+            openPopup(contributor);
+          }
+        }
+      }
+
+      window.addEventListener('hashchange', handleHashNavigation);
+      document.addEventListener('DOMContentLoaded', async () => {
+        await loadContributors();
+        await handleHashNavigation();
+      });
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,375 @@
+.popup-info h1,
+.popup-info p,
+body {
+    color: oklch(var(--text));
+}
+
+body,
+hr::after {
+    position: relative;
+}
+
+:root {
+    --color: 81.21% 0.1409 165.14;
+    --mantle: 10.67% 0 0;
+    --base: 0% 0 0;
+    --text: 95.92% 0.019253 273.2377;
+    --lavender: 62.56% 0.236 299.56;
+    --red: 70.55% 0.1899 13.38;
+}
+
+* {
+    scrollbar-color: oklch(var(--color)) oklch(var(--mantle) / 0.5);
+    scrollbar-width: thin;
+    scroll-behavior: smooth;
+}
+
+::selection {
+    background: oklch(var(--color) / 1);
+    color: oklch(var(--base));
+}
+
+.contributor-card,
+.popup {
+    background: oklch(var(--mantle));
+}
+
+body {
+  font-family: 'Inter', sans-serif; /* Set tnter as the font bc "make everythign inter" */
+    padding: 0;
+    margin: 0;
+    background-color: #191919;
+    color: oklch(var(--text));
+}
+
+.header {
+    margin: 0 auto;
+    max-width: 1100px;
+    padding: 2rem 2rem 0px 2rem;
+    border-radius: 6px;
+    overflow-x: hidden;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+a {
+    color: oklch(var(--lavender));
+    display: inline-block;
+    text-decoration: wavy underline;
+    transition: transform .3s cubic-bezier(.175, .885, .32, 1.9);
+}
+
+a:hover {
+    transform: scale(1.05) skew(-5deg);
+}
+
+.contributors {
+    width: 90vw;
+    margin: 0vw 5vw 0vw 5vw;
+    overflow: hidden;
+    position: relative;
+}
+
+.contributors::before {
+    content: "";
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(25,25,25,1) 0%, rgba(25,25,25,0) 20%),
+                            linear-gradient(-90deg, rgba(25,25,25,1) 0%, rgba(25,25,25,0) 20%);
+    pointer-events: none;
+}
+
+.contributors-container {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(20, minmax(200px, 1fr));
+    width: max-content;
+    animation: carouselAnimation 9s infinite linear;
+    box-sizing: border-box;
+}
+
+.contributors:hover .contributors-container:not(.popup-active) {
+    animation-play-state: paused;
+}
+
+.contributors-container.popup-active {
+    opacity: 0; /* fade out the carousel when a pop up card is opened */
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: -10; /* push the carousel behind everything so the box doesnt show */
+    position: absolute;
+}
+
+.contributor-card {
+    border-radius: 12px;
+    margin: 8px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+}
+
+.contributor-card h3 {
+  font-weight: 700;
+  margin: 0;
+  color: oklch(var(--text));
+}
+
+.contributor-card:hover {
+  transform: scale(1.05);
+  z-index: 2;
+}
+
+.contributors:hover .contributor-card:not(:hover) {
+    filter: blur(5px) brightness(0.7);
+    transform: scale(0.95);
+}
+
+.contributor-card img {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    margin: 8px;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 40px;
+    box-shadow: 0 0 40px 5px oklch(var(--color) / .3);
+    display: none;
+    width: 777px;
+    height: 327px;
+    max-width: 90%;
+    transition: opacity .3s;
+    z-index: 10;
+}
+
+.popup-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.popup img {
+    height: 288px;
+    width: auto;
+    border-radius: 50px;
+    padding: 20px;
+    object-fit: cover;
+}
+
+.popup-info {
+    width: 100%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.popup-info h1 {
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin: 0;
+}
+
+#popup-description {
+    width: 389px;
+}
+
+.popup-info p {
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.popup-socials {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: auto;
+}
+
+.popup-socials p {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-size: 16px;
+}
+
+.popup-socials a {
+    display: inline-flex;
+    background: #2c2741;
+    padding: 4px 8px;
+    border-radius: 6px;
+    color: oklch(var(--lavender));
+    text-decoration: none;
+    font-size: 16px;
+    align-items: center;
+    white-space: nowrap;
+    max-width: fit-content;
+}
+
+h1::before,
+h2::before,
+h3::before,
+h4::before,
+h5::before,
+h6::before,
+hr::before,
+small::after,
+small::before {
+    color: oklch(var(--color));
+}
+
+.popup-socials a:hover {
+    background: #45475a;
+}
+
+h1::before,
+h3::before {
+    content: "# ";
+}
+
+small::before {
+    content: "<small>";
+}
+
+small::after {
+    content: "</small>";
+}
+
+hr {
+    border: none;
+    margin: 1rem 0;
+}
+
+hr::after {
+    content: "";
+    display: block;
+    height: 1px;
+    top: -.5rem;
+    left: 30px;
+    background: linear-gradient(90deg, oklch(var(--color) / 1), transparent);
+}
+
+hr::before {
+    content: "---";
+}
+
+@keyframes carouselAnimation {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes popupFadeOut {
+    from {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(.9);
+    }
+}
+
+.popup.active {
+    display: flex;
+    animation: .3s forwards popupFadeIn;
+    opacity: 1;
+}
+
+.popup.hidden {
+    animation: .3s forwards popupFadeOut;
+    opacity: 0;
+}
+
+@keyframes overlayFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes overlayFadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+    backdrop-filter: blur(8px);
+    display: none;
+    z-index: 1;
+    opacity: 0;
+}
+
+.popup-overlay.active {
+    display: block;
+    animation: overlayFadeIn 0.3s forwards;
+}
+
+.popup-overlay.hidden {
+    animation: overlayFadeOut 0.3s forwards;
+}
+
+
+
+
+@keyframes breathingGlow {
+  0% {
+    box-shadow: 0 6px 15px oklch(var(--color) / 0.5);
+  }
+  50% {
+    box-shadow: 0 6px 25px oklch(var(--color) / 0.8);
+  }
+  100% {
+    box-shadow: 0 6px 15px oklch(var(--color) / 0.5);
+  }
+}
+/* wanted to get rid of the carousel, but couldnt tell whether to just make it disappear or put a animation in */
+.contributors-container.popup-active {
+  visibility: hidden; /* Hide the carousel */
+  opacity: 0; /* Fade out the carousel */
+  transition: opacity 0.3s ease; /* Smooth transition for fading */
+}
